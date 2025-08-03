@@ -3,24 +3,35 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 </script>
 
-<main class="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-	<Card.Root class="w-full max-w-2xl">
-		<Card.Header class="text-center">
-			<Card.Title
-				class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none text-gray-900 dark:text-gray-50"
-			>
-				Web-based Robot Teleoperation
-			</Card.Title>
-			<Card.Description
-				class="mx-auto max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400"
-			>
-				An open-source, web-based robot teleoperation interface.
-			</Card.Description>
-		</Card.Header>
-		<Card.Footer class="flex justify-center">
-			<Button href="https://TODO.com">
-				Learn More
-			</Button>
-		</Card.Footer>
-	</Card.Root>
+<main class="grid grid-cols-[1fr,min(80ch,100%),1fr] gap-y-8 py-8">
+	<div class="col-start-2 px-4">
+		<Card.Root>
+			<Card.Header class="text-center">
+				<Card.Title
+					class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none"
+				>
+					Web Robot Teleop Demo
+				</Card.Title>
+				<Card.Description
+					class="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
+				>
+					A demonstration of Kong's extremely fast and accurate geometric IK solver.
+				</Card.Description>
+			</Card.Header>
+			<Card.Footer class="flex justify-center">
+				<Button href="https://TODO.com"> Learn More </Button>
+			</Card.Footer>
+		</Card.Root>
+	</div>
+
+	<div class="col-span-3 bg-muted text-muted-foreground p-8">
+		<p class="text-center">This is a full-width section.</p>
+	</div>
+
+	<div class="col-start-2 px-4">
+		<p>
+			This is another constrained section. You can add more content here, and it will remain within
+			the main column.
+		</p>
+	</div>
 </main>

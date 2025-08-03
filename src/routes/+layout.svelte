@@ -9,13 +9,28 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+	<title>Web Robot Teleop Demo</title>
 </svelte:head>
 
 <header class="px-4 lg:px-6 h-14 flex items-center">
 	<a class="flex items-center justify-center" href="/">
-		<span class="sr-only">Web-based Robot Teleoperation</span>
+		<span class="font-semibold">Web Robot Teleop Demo</span>
 	</a>
-	<nav class="ml-auto flex gap-4 sm:gap-6">
+	<nav class="mx-auto flex gap-4 sm:gap-6">
+		<Button variant="ghost" href="/" class="text-sm font-medium">
+			Project
+		</Button>
+		<Button variant="ghost" href="/comparison" class="text-sm font-medium">
+			Comparison
+		</Button>
+		<Button variant="ghost" href="/tasks" class="text-sm font-medium">
+			Tasks
+		</Button>
+		<Button variant="ghost" href="/people" class="text-sm font-medium">
+			People
+		</Button>
+	</nav>
+	<nav class="flex gap-4 sm:gap-6">
 		<Button
 			variant="link"
 			href="https://TODO.com"
@@ -50,10 +65,10 @@
 		All rights reserved.
 	</p>
 	<nav class="sm:ml-auto flex gap-4 sm:gap-6">
-		<!-- <Button variant="link" href="#" class="text-xs">
-			Terms of Service
+		<Button variant="link" href="https://github.com/safe-robotics-lab-gt" class="text-xs">
+			Safe Robotics Lab @ GitHub
 		</Button>
-		<Button variant="link" href="#" class="text-xs">
+		<!-- <Button variant="link" href="#" class="text-xs">
 			Privacy
 		</Button> -->
 	</nav>

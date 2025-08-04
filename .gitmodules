@@ -1,0 +1,6 @@
+[submodule "References/--force"]
+	path = References/--force
+	url = https://github.com/yunho-c/mujoco_wasm
+[submodule "References/mujoco_wasm"]
+	path = References/mujoco_wasm
+	url = https://github.com/yunho-c/mujoco_wasm

@@ -4,7 +4,15 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 
+	import { onMount } from 'svelte';
+
 	let { children } = $props();
+
+onMount(async () => {
+	const script = document.createElement('script');
+	script.src = '/mujoco/mujoco_wasm.js';
+	document.head.appendChild(script);
+});
 </script>
 
 <svelte:head>

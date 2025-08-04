@@ -17,7 +17,8 @@
 	},
 	"dependencies": {
 		"@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
-		"mujoco_wasm_contrib": "^0.0.4"
+		"mujoco_wasm_contrib": "^0.0.4",
+		"three": "0.150.1"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",

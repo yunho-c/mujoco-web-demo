@@ -592,6 +592,10 @@ export async function downloadExampleScenesFolder(mujoco) {
     "model_with_tendon.xml",
   ];
 
+  // // OPT2
+  // mujoco.FS.mkdir('/working');
+  // mujoco.FS.mount(mujoco.MEMFS, { root: '.' }, '/working');
+
   let requests = allFiles.map((url) => fetch("./examples/scenes/" + url));
   let responses = await Promise.all(requests);
   for (let i = 0; i < responses.length; i++) {
@@ -603,8 +607,6 @@ export async function downloadExampleScenesFolder(mujoco) {
           working += "/";
       }
       console.log(mujoco.FS); // DEBUG
-      mujoco.FS.create("/working/");
-      // mujoco.FS.chmod('/working', 0o755);
 
       if (allFiles[i].endsWith(".png") || allFiles[i].endsWith(".stl") || allFiles[i].endsWith(".skn")) {
           mujoco.FS.writeFile("/working/" + allFiles[i], new Uint8Array(await responses[i].arrayBuffer())); // ERROR

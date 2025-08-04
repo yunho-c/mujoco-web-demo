@@ -11,7 +11,7 @@
 				Web Robot Teleop Demo
 			</h1>
 			<p
-				class="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
+				class="mx-auto text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
 			>
 				A demonstration of Kong's extremely fast and accurate geometric IK solver.
 			</p>

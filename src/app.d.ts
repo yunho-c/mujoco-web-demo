@@ -10,4 +10,11 @@ declare global {
 	}
 }
 
+declare module '@mediapipe/tasks-vision' {
+	const PoseLandmarker: unknown;
+	const FilesetResolver: unknown;
+	const DrawingUtils: unknown;
+	export { PoseLandmarker, FilesetResolver, DrawingUtils };
+}
+
 export {};

@@ -602,11 +602,14 @@ export async function downloadExampleScenesFolder(mujoco) {
           if (!mujoco.FS.analyzePath(working).exists) { mujoco.FS.mkdir(working); }
           working += "/";
       }
+      console.log(mujoco.FS); // DEBUG
+      mujoco.FS.create("/working/");
+      // mujoco.FS.chmod('/working', 0o755);
 
       if (allFiles[i].endsWith(".png") || allFiles[i].endsWith(".stl") || allFiles[i].endsWith(".skn")) {
-          mujoco.FS.writeFile("/working/" + allFiles[i], new Uint8Array(await responses[i].arrayBuffer()));
+          mujoco.FS.writeFile("/working/" + allFiles[i], new Uint8Array(await responses[i].arrayBuffer())); // ERROR
       } else {
-          mujoco.FS.writeFile("/working/" + allFiles[i], await responses[i].text());
+          mujoco.FS.writeFile("/working/" + allFiles[i], await responses[i].text()); // ERROR
       }
   }
 }

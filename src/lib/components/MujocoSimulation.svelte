@@ -115,6 +115,7 @@
 		}
 
 		async init() {
+			console.log(this);
 			await downloadExampleScenesFolder(this.mujoco);
 			[this.model, this.state, this.simulation, this.bodies, this.lights] = await loadSceneFromURL(
 				this.mujoco,

@@ -116,7 +116,7 @@
 			this.scene.add(this.ambientLight);
 			this.renderer = new THREE.WebGLRenderer({ antialias: true });
 			this.renderer.setPixelRatio(window.devicePixelRatio);
-			this.renderer.setSize(window.innerWidth, window.innerHeight);
+			this.renderer.setSize(container.scrollWidth, container.scrollHeight);
 			this.renderer.shadowMap.enabled = true;
 			this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 			this.renderer.setAnimationLoop(this.render.bind(this));
@@ -155,7 +155,7 @@
 		onWindowResize() {
 			this.camera.aspect = window.innerWidth / window.innerHeight;
 			this.camera.updateProjectionMatrix();
-			this.renderer.setSize(window.innerWidth, window.innerHeight);
+			this.renderer.setSize(container.scrollWidth, container.scrollHeight);
 		}
 
 		// render() {

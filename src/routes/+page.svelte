@@ -1,13 +1,12 @@
 <script lang="ts">
 	import WebcamPose from '$lib/components/WebcamPose.svelte';
+	import MujocoSimulation from '$lib/components/MujocoSimulation.svelte';
 </script>
 
 <main class="grid grid-cols-[1fr,min(80ch,100%),1fr] gap-y-8 py-8">
 	<div class="col-start-2 px-4">
 		<div class="text-center">
-			<h1
-				class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none"
-			>
+			<h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none">
 				Web Robot Teleop Demo
 			</h1>
 			<p
@@ -24,6 +23,7 @@
 		</div>
 		<div class="col-span-1">
 			<p class="text-center">This is the right half of the full-width section.</p>
+			<MujocoSimulation />
 		</div>
 	</div>
 

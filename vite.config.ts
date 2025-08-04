@@ -33,5 +33,13 @@ export default defineConfig({
 				}
 			}
 		]
+	},
+	optimizeDeps: {
+		exclude: ['mujoco_wasm_contrib']
+	},
+	server: {
+		fs: {
+			allow: ['./node_modules/mujoco_wasm_contrib/', './static']
+		}
 	}
 });

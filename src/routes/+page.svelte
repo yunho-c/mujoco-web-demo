@@ -1,5 +1,6 @@
 <script lang="ts">
 	import WebcamPose from '$lib/components/WebcamPose.svelte';
+	import MujocoSimulation from '$lib/components/MujocoSimulation.svelte';
 </script>
 
 <main class="grid grid-cols-[1fr,min(80ch,100%),1fr] gap-y-8 py-8">
@@ -23,7 +24,7 @@
 			<WebcamPose />
 		</div>
 		<div class="col-span-1">
-			<p class="text-center">This is the right half of the full-width section.</p>
+			<MujocoSimulation />
 		</div>
 	</div>
 

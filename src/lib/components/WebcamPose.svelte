@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { PoseLandmarker, FilesetResolver, DrawingUtils } from '@mediapipe/tasks-vision';
+	import { Button } from '$lib/components/ui/button';
 
 	let poseLandmarker: PoseLandmarker | undefined = undefined;
-	let runningMode = 'VIDEO';
-	let enableWebcamButton: HTMLButtonElement;
+	let runningMode: 'VIDEO' | 'IMAGE' = 'VIDEO';
 	let webcamRunning = false;
 	let video: HTMLVideoElement;
 	let canvasElement: HTMLCanvasElement;
@@ -36,12 +36,18 @@
 			if (video.currentTime !== lastVideoTime) {
 				lastVideoTime = video.currentTime;
 				let startTimeMs = performance.now();
-				poseLandmarker.detectForVideo(video, startTimeMs, (result: { landmarks: any[]; }) => {
+				if (!poseLandmarker) return;
+				poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
 					canvasCtx.save();
 					canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 					for (const landmark of result.landmarks) {
 						drawingUtils.drawLandmarks(landmark, {
-							radius: (data: { from: { z: number; }; }) => DrawingUtils.lerp(data.from!.z, -0.15, 0.1, 5, 1)
+							radius: (data) => {
+								if (data.from) {
+									return DrawingUtils.lerp(data.from.z, -0.15, 0.1, 5, 1);
+								}
+								return 1;
+							}
 						});
 						drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
 					}
@@ -72,19 +78,17 @@
 			const stream = video.srcObject as MediaStream;
 			stream.getTracks().forEach((track) => track.stop());
 			video.srcObject = null;
-			enableWebcamButton.innerText = 'ENABLE WEBCAM';
 		} else {
-			enableWebcamButton.innerText = 'DISABLE WEBCAM';
 			predictWebcam();
 		}
 	}
 </script>
 
 <div class="videoView">
-	<button bind:this={enableWebcamButton} on:click={enableCam} class="mdc-button mdc-button--raised">
-		<span class="mdc-button__ripple"></span>
-		<span class="mdc-button__label">ENABLE WEBCAM</span>
-	</button>
+	<Button onclick={enableCam} class="primary text-sm font-medium">
+		<!-- <span class="mdc-button__ripple"></span> -->
+		<span class="mdc-button__label">{webcamRunning ? 'DISABLE WEBCAM' : 'ENABLE WEBCAM'}</span>
+	</Button>
 	<div style="position: relative;">
 		<video bind:this={video} style="width: 100%; height: auto; position: abso" autoplay playsinline></video>
 		<canvas

@@ -16,7 +16,8 @@
 		"test": "npm run test:unit -- --run"
 	},
 	"dependencies": {
-		"@mediapipe/tasks-vision": "^0.10.22-rc.20250304"
+		"@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
+		"mujoco_wasm_contrib": "^0.0.4"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",

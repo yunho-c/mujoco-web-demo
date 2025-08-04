@@ -6,6 +6,7 @@
 	let poseLandmarker: PoseLandmarker | undefined = undefined;
 	let runningMode: 'VIDEO' | 'IMAGE' = 'VIDEO';
 	let webcamRunning = false;
+	let isHovering = false;
 	let video: HTMLVideoElement;
 	let canvasElement: HTMLCanvasElement;
 	let canvasCtx: CanvasRenderingContext2D;
@@ -85,11 +86,11 @@
 </script>
 
 <div class="videoView">
-	<Button onclick={enableCam} class="primary text-sm font-medium">
-		<!-- <span class="mdc-button__ripple"></span> -->
-		<span class="mdc-button__label">{webcamRunning ? 'DISABLE WEBCAM' : 'ENABLE WEBCAM'}</span>
-	</Button>
-	<div style="position: relative;">
+	<div
+		style="position: relative;"
+		onmouseenter={() => (isHovering = true)}
+		onmouseleave={() => (isHovering = false)}
+	>
 		<video bind:this={video} style="width: 100%; height: auto; position: abso" autoplay playsinline></video>
 		<canvas
 			bind:this={canvasElement}
@@ -98,6 +99,11 @@
 			height="720"
 			style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"
 		></canvas>
+		{#if !webcamRunning || isHovering}
+			<Button onclick={enableCam} class="button-overlay">
+				<span class="">{webcamRunning ? 'DISABLE WEBCAM' : 'ENABLE WEBCAM'}</span>
+			</Button>
+		{/if}
 	</div>
 </div>
 
@@ -117,5 +123,12 @@
 		transform: rotateY(180deg);
 		-webkit-transform: rotateY(180deg);
 		-moz-transform: rotateY(180deg);
+	}
+	.button-overlay {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 10;
 	}
 </style>

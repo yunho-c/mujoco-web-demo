@@ -1,14 +1,71 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { PoseLandmarker, FilesetResolver, DrawingUtils } from '@mediapipe/tasks-vision';
+	import { onMount, onDestroy } from 'svelte';
+	import {
+		PoseLandmarker,
+		FilesetResolver,
+		DrawingUtils,
+		type PoseLandmarkerResult,
+		type LandmarkData
+	} from '@mediapipe/tasks-vision';
+	import { Button } from '$lib/components/ui/button/index.js';
 
 	let poseLandmarker: PoseLandmarker | undefined = undefined;
-	let runningMode = 'VIDEO';
-	let enableWebcamButton: HTMLButtonElement;
 	let webcamRunning = false;
+	$: buttonText = webcamRunning ? 'DISABLE WEBCAM' : 'ENABLE WEBCAM';
 	let video: HTMLVideoElement;
 	let canvasElement: HTMLCanvasElement;
 	let canvasCtx: CanvasRenderingContext2D;
+	let drawingUtils: DrawingUtils;
+	let lastVideoTime = -1;
+
+	const renderLoop = () => {
+		if (video.currentTime !== lastVideoTime) {
+			lastVideoTime = video.currentTime;
+			const startTimeMs = performance.now();
+			poseLandmarker!.detectForVideo(video, startTimeMs, (result: PoseLandmarkerResult) => {
+				canvasCtx.save();
+				canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+				for (const landmark of result.landmarks) {
+					drawingUtils.drawLandmarks(landmark, {
+						radius: (data: LandmarkData) => DrawingUtils.lerp(data.from!.z, -0.15, 0.1, 5, 1)
+					});
+					drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+				}
+				canvasCtx.restore();
+			});
+		}
+		if (webcamRunning) {
+			window.requestAnimationFrame(renderLoop);
+		}
+	};
+
+	const startWebcam = () => {
+		if (!webcamRunning) {
+			webcamRunning = true;
+			window.requestAnimationFrame(renderLoop);
+		}
+	};
+
+	const enableCam = async () => {
+		if (!poseLandmarker) {
+			return;
+		}
+
+		if (webcamRunning) {
+			// Stop webcam
+			webcamRunning = false;
+			const stream = video.srcObject as MediaStream;
+			if (stream) {
+				stream.getTracks().forEach((track) => track.stop());
+			}
+			video.srcObject = null;
+		} else {
+			// Start webcam
+			const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+			video.srcObject = stream;
+			// The listener will call startWebcam
+		}
+	};
 
 	onMount(async () => {
 		const createPoseLandmarker = async () => {
@@ -18,91 +75,46 @@
 					modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task`,
 					delegate: 'GPU'
 				},
-				runningMode: runningMode,
+				runningMode: 'VIDEO',
 				numPoses: 2
 			});
 		};
 		await createPoseLandmarker();
 		canvasCtx = canvasElement.getContext('2d')!;
+		drawingUtils = new DrawingUtils(canvasCtx);
+		video.addEventListener('loadeddata', startWebcam);
 	});
 
-	async function predictWebcam() {
-		if (!poseLandmarker) return;
-
-		let lastVideoTime = -1;
-		const drawingUtils = new DrawingUtils(canvasCtx);
-
-		const renderLoop = () => {
-			if (video.currentTime !== lastVideoTime) {
-				lastVideoTime = video.currentTime;
-				let startTimeMs = performance.now();
-				poseLandmarker.detectForVideo(video, startTimeMs, (result: { landmarks: any[]; }) => {
-					canvasCtx.save();
-					canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-					for (const landmark of result.landmarks) {
-						drawingUtils.drawLandmarks(landmark, {
-							radius: (data: { from: { z: number; }; }) => DrawingUtils.lerp(data.from!.z, -0.15, 0.1, 5, 1)
-						});
-						drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
-					}
-					canvasCtx.restore();
-				});
-			}
-			if (webcamRunning) {
-				window.requestAnimationFrame(renderLoop);
-			}
-		};
-
-		const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-		video.srcObject = stream;
-		video.addEventListener('loadeddata', () => {
-			webcamRunning = true;
-			renderLoop();
-		});
-	}
-
-	function enableCam() {
-		if (!poseLandmarker) {
-			console.log('Wait! poseLandmaker not loaded yet.');
-			return;
+	onDestroy(() => {
+		// Clean up listener
+		if (video) {
+			video.removeEventListener('loadeddata', startWebcam);
 		}
-
+		// Stop webcam if it's running
 		if (webcamRunning) {
-			webcamRunning = false;
 			const stream = video.srcObject as MediaStream;
-			stream.getTracks().forEach((track) => track.stop());
+			if (stream) {
+				stream.getTracks().forEach((track) => track.stop());
+			}
 			video.srcObject = null;
-			enableWebcamButton.innerText = 'ENABLE WEBCAM';
-		} else {
-			enableWebcamButton.innerText = 'DISABLE WEBCAM';
-			predictWebcam();
 		}
-	}
+	});
 </script>
 
-<div class="videoView">
-	<button bind:this={enableWebcamButton} on:click={enableCam} class="mdc-button mdc-button--raised">
-		<span class="mdc-button__ripple"></span>
-		<span class="mdc-button__label">ENABLE WEBCAM</span>
-	</button>
-	<div style="position: relative;">
-		<video bind:this={video} style="width: 100%; height: auto; position: abso" autoplay playsinline></video>
+<div class="flex flex-col items-center gap-4">
+	<div class="relative w-full">
+		<video bind:this={video} class="h-auto w-full" autoplay playsinline></video>
 		<canvas
 			bind:this={canvasElement}
-			class="output_canvas"
+			class="output_canvas absolute left-0 top-0 h-full w-full"
 			width="1280"
 			height="720"
-			style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"
 		></canvas>
 	</div>
+	<Button on:click={enableCam} disabled={!poseLandmarker}>{buttonText}</Button>
 </div>
 
 <style>
-	.videoView {
-		position: relative;
-		width: 100%;
-		height: 100%;
-	}
 	.output_canvas {
 		transform: rotateY(180deg);
 		-webkit-transform: rotateY(180deg);

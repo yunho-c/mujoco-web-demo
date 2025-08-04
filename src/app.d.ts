@@ -8,6 +8,23 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+	interface Window {
+		load_mujoco: (options: { mainScriptUrlOrBlob: string }) => Promise<any>;
+		downloadExampleScenesFolder: (mujoco: any) => Promise<void>;
+		loadSceneFromURL: (
+			mujoco: any,
+			scene: string,
+			demo: any
+		) => Promise<[any, any, any, any, any]>;
+		setupGUI: (demo: any) => void;
+		DragStateManager: new (
+			scene: any,
+			renderer: any,
+			camera: any,
+			container: HTMLElement,
+			controls: any
+		) => any;
+	}
 }
 
 declare module '@mediapipe/tasks-vision' {

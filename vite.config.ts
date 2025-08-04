@@ -1,10 +1,12 @@
+import wasm from 'vite-plugin-wasm';
+import topLevelAwait from 'vite-plugin-top-level-await';
 import devtoolsJson from 'vite-plugin-devtools-json';
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit(), devtoolsJson()],
+	plugins: [wasm(), topLevelAwait(), tailwindcss(), sveltekit(), devtoolsJson()],
 	test: {
 		expect: { requireAssertions: true },
 		projects: [
@@ -33,5 +35,13 @@ export default defineConfig({
 				}
 			}
 		]
+	},
+	optimizeDeps: {
+		exclude: ['mujoco_wasm_contrib']
+	},
+	server: {
+		fs: {
+			allow: ['./node_modules/mujoco_wasm_contrib/']
+		}
 	}
 });

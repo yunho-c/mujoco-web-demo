@@ -3,20 +3,14 @@
 	import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 	import { onMount } from 'svelte';
-	import type { Model, Simulation, State, mujoco } from '$lib/mujoco/mujoco_wasm';
-	import {
-		downloadExampleScenesFolder,
-		loadSceneFromURL,
-		setupGUI
-	} from '$lib/mujoco/mujocoUtils.js';
-	import { DragStateManager } from '$lib/mujoco/DragStateManager.js';
-
 	let container: HTMLDivElement;
 	onMount(() => {
-		let demo: MuJoCoDemo | null = null;
+		let demo: any | null = null;
 
-		const init = async () => {
-			const mujoco = await (window as any).loadMujoco();
+		const initDemo = async () => {
+			const mujoco = await window.load_mujoco({
+				mainScriptUrlOrBlob: '/mujoco/mujoco_wasm.js'
+			});
 			if (!mujoco) {
 				return;
 			}
@@ -24,7 +18,7 @@
 			await demo.init();
 		};
 
-		init();
+		initDemo();
 
 		return () => {
 			if (demo) {
@@ -38,10 +32,10 @@
 	});
 
 	class MuJoCoDemo {
-		mujoco: mujoco;
-		model: Model | null = null;
-		state: State | null = null;
-		simulation: Simulation | null = null;
+		mujoco: any;
+		model: any | null = null;
+		state: any | null = null;
+		simulation: any | null = null;
 		params: any;
 		mujoco_time: number;
 		bodies: any;
@@ -55,11 +49,11 @@
 		ambientLight: THREE.AmbientLight;
 		renderer: THREE.WebGLRenderer;
 		controls: OrbitControls;
-		dragStateManager: DragStateManager;
+		dragStateManager: any;
 		gui: GUI | null = null;
 		mujocoRoot: THREE.Group | null = null;
 
-		constructor(mujoco: mujoco) {
+		constructor(mujoco: any) {
 			this.mujoco = mujoco;
 			this.params = {
 				scene: 'humanoid.xml',
@@ -108,7 +102,7 @@
 			this.controls.screenSpacePanning = true;
 			this.controls.update();
 			window.addEventListener('resize', this.onWindowResize.bind(this));
-			this.dragStateManager = new DragStateManager(
+			this.dragStateManager = new window.DragStateManager(
 				this.scene,
 				this.renderer,
 				this.camera,
@@ -118,14 +112,11 @@
 		}
 
 		async init() {
-			await downloadExampleScenesFolder(this.mujoco);
-			[this.model, this.state, this.simulation, this.bodies, this.lights] = await loadSceneFromURL(
-				this.mujoco,
-				this.params.scene,
-				this
-			);
+			await window.downloadExampleScenesFolder(this.mujoco);
+			[this.model, this.state, this.simulation, this.bodies, this.lights] =
+				await window.loadSceneFromURL(this.mujoco, this.params.scene as string, this);
 			this.gui = new GUI();
-			setupGUI(this);
+			window.setupGUI(this);
 		}
 
 		onWindowResize() {

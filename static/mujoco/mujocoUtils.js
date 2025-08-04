@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Reflector  } from './utils/Reflector.js';
-import { MuJoCoDemo } from './main.js';
+// import { MuJoCoDemo } from './main.js';
 
 export async function reloadFunc() {
   // Delete the old scene and load the new scene
@@ -249,7 +249,7 @@ export function setupGUI(parentContext) {
       // TODO: Use free camera parameters from MuJoCo
       parentContext.camera.position.set(2.0, 1.7, 1.7);
       parentContext.controls.target.set(0, 0.7, 0);
-      parentContext.controls.update(); 
+      parentContext.controls.update();
       event.preventDefault();
     }
   });
@@ -523,7 +523,7 @@ export async function loadSceneFromURL(mujoco, filename, parent) {
         bodies[0].add(bodies[b]);
       }
     }
-  
+
     parent.mujocoRoot = mujocoRoot;
 
     return [model, state, simulation, bodies, lights]

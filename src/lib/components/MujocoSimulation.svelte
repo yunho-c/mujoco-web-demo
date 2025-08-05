@@ -11,7 +11,7 @@
 	} from 'mujoco_wasm_contrib';
 	import { DragStateManager } from '$lib/mujoco/DragStateManager';
 	import {
-		downloadExampleScenesFolder,
+		downloadExampleScenes,
 		getPosition,
 		getQuaternion,
 		loadSceneFromURL,
@@ -163,7 +163,7 @@
 
 		async init() {
 			console.log(this);
-			await downloadExampleScenesFolder(this.mujoco);
+			await downloadExampleScenes(this.mujoco);
 			[this.model, this.state, this.simulation, this.bodies, this.lights] = await loadSceneFromURL(
 				this.mujoco,
 				this.params.scene as string,

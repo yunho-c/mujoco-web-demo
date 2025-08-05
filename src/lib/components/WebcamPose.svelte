@@ -90,7 +90,8 @@
 		<span class="mdc-button__label">{webcamRunning ? 'DISABLE WEBCAM' : 'ENABLE WEBCAM'}</span>
 	</Button>
 	<div style="position: relative;">
-		<video bind:this={video} style="width: 100%; height: auto; position: abso" autoplay playsinline></video>
+		<video bind:this={video} style="width: 100%; height: auto; position: abso" autoplay playsinline
+		></video>
 		<canvas
 			bind:this={canvasElement}
 			class="output_canvas"

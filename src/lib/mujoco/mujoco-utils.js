@@ -378,10 +378,6 @@ export async function downloadExampleScenes(mujoco) {
 		'model_with_tendon.xml'
 	];
 
-	// // OPT2
-	// mujoco.FS.mkdir('/working');
-	// mujoco.FS.mount(mujoco.MEMFS, { root: '.' }, '/working');
-
 	let requests = allFiles.map((url) => fetch('./examples/scenes/' + url));
 	let responses = await Promise.all(requests);
 	for (let i = 0; i < responses.length; i++) {

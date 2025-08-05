@@ -11,7 +11,7 @@ import {
 	WebGLRenderTarget,
 	HalfFloatType,
 	NoToneMapping,
-	LinearEncoding,
+	// LinearEncoding,
     MeshPhysicalMaterial
 } from 'three';
 
@@ -175,7 +175,7 @@ class Reflector extends Mesh {
 
 			renderer.xr.enabled = false; // Avoid camera modification
 			renderer.shadowMap.autoUpdate = false; // Avoid re-computing shadows
-			renderer.outputEncoding = LinearEncoding;
+			// renderer.outputEncoding = LinearEncoding;
 			renderer.toneMapping = NoToneMapping;
 
 			renderer.setRenderTarget( renderTarget );

@@ -104,8 +104,8 @@
 	</p>
 	<nav class="flex gap-4 sm:ml-auto sm:gap-6">
 		<Dialog.Root>
-			<Dialog.Trigger>
-				<Button variant="link" class="text-xs opacity-50">Debug</Button>
+			<Dialog.Trigger class="link text-xs opacity-20">
+        Debug
 			</Dialog.Trigger>
 			<Dialog.Content class="sm:max-w-50%">
 				<Dialog.Header>

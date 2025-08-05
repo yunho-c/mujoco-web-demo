@@ -5,7 +5,7 @@
 	import { onMount } from 'svelte';
 	import load_mujoco, {
 		type Model,
-		type Mujoco,
+		type mujoco as Mujoco,
 		type Simulation,
 		type State
 	} from 'mujoco_wasm_contrib';
@@ -15,15 +15,20 @@
 		getPosition,
 		getQuaternion,
 		loadSceneFromURL,
-		setupGUI,
 		standardNormal,
 		toMujocoPos
 	} from '$lib/mujoco/mujocoUtils';
+	import { setupGUI } from '$lib/mujoco/gui';
+	import { loadSceneWithAssets } from '$lib/services/mujocoAssetLoader';
 	let container: HTMLDivElement;
 
 	interface MujocoRootGroup extends THREE.Group {
 		cylinders?: THREE.InstancedMesh;
 		spheres?: THREE.InstancedMesh;
+	}
+
+	interface Body extends THREE.Object3D {
+		bodyID?: number;
 	}
 
 	interface DemoParams {
@@ -79,7 +84,7 @@
 		simulation: Simulation | null = null;
 		params: DemoParams;
 		mujoco_time: number;
-		bodies: Record<number, THREE.Object3D>;
+		bodies: Record<number, Body>;
 		lights: Record<number, THREE.Light>;
 		tmpVec: THREE.Vector3;
 		tmpQuat: THREE.Quaternion;
@@ -203,13 +208,13 @@
 					for (let i = 0; i < this.simulation!.qfrc_applied.length; i++) {
 						this.simulation!.qfrc_applied[i] = 0.0;
 					}
-					let dragged = this.dragStateManager.physicsObject;
+					let dragged = this.dragStateManager.physicsObject as Body;
 					if (dragged && dragged.bodyID) {
 						for (let b = 0; b < this.model!.nbody; b++) {
 							if (this.bodies[b]) {
 								getPosition(this.simulation!.xpos, b, this.bodies[b].position);
 								getQuaternion(this.simulation!.xquat, b, this.bodies[b].quaternion);
-								this.bodies[b].updateWorldMatrix();
+								this.bodies[b].updateWorldMatrix(true, true);
 							}
 						}
 						let bodyID = dragged.bodyID;
@@ -243,7 +248,7 @@
 				}
 			} else if (this.params['paused']) {
 				this.dragStateManager.update(); // Update the world-space force origin
-				let dragged = this.dragStateManager.physicsObject;
+				let dragged = this.dragStateManager.physicsObject as Body;
 				if (dragged && dragged.bodyID) {
 					let b = dragged.bodyID;
 					getPosition(this.simulation!.xpos, b, this.tmpVec, false); // Get raw coordinate from MuJoCo
@@ -312,7 +317,7 @@
 				if (this.bodies[b]) {
 					getPosition(this.simulation!.xpos, b, this.bodies[b].position);
 					getQuaternion(this.simulation!.xquat, b, this.bodies[b].quaternion);
-					this.bodies[b].updateWorldMatrix();
+					this.bodies[b].updateWorldMatrix(true, true);
 				}
 			}
 

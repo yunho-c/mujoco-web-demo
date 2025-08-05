@@ -105,3 +105,15 @@ if __name__ == "__main__":
 
     # Debug: Boston Dynamics Spot
     generate_index("models/boston_dynamics_spot/spot.xml", includes=["scene.xml"])
+
+    # Debug: Unitree A1
+    generate_index("models/unitree_a1/a1.xml", includes=["scene.xml"])
+
+    # Debug: Unitree Go2
+    generate_index("models/unitree_go2/go2.xml", includes=["scene.xml"])
+
+    # Debug: Unitree H1
+    generate_index("models/unitree_h1/h1.xml", includes=["scene.xml"])
+
+    # Debug: Unitree Z1
+    generate_index("models/unitree_z1/z1.xml", includes=["scene.xml"])

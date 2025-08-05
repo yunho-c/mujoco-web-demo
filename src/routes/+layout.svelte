@@ -10,7 +10,7 @@
 	import { onMount } from 'svelte';
 	let { children } = $props();
 
-	let mujoco: import('mujoco_wasm_contrib').mujoco | null = null;
+	let mujoco: import('mujoco_wasm_contrib/debug').mujoco | null = null;
 	mujocoInstance.subscribe((value) => {
 		mujoco = value;
 	});
@@ -52,7 +52,12 @@
 			await loadSceneWithAssets(mujoco, 'models/boston_dynamics_spot/scene.xml'); // DEBUG
 			await loadSceneWithAssets(mujoco, 'models/rby1a/mujoco/model.xml');
 			await loadSceneWithAssets(mujoco, 'models/unitree_g1/g1.xml');
-			await loadSceneWithAssets(mujoco, 'models/unitree_g1/scene.xml');
+			// await loadSceneWithAssets(mujoco, 'models/unitree_g1/scene.xml');
+
+			await loadSceneWithAssets(mujoco, 'models/unitree_a1/scene.xml');
+			await loadSceneWithAssets(mujoco, 'models/unitree_go2/scene.xml');
+			await loadSceneWithAssets(mujoco, 'models/unitree_h1/scene.xml');
+			await loadSceneWithAssets(mujoco, 'models/unitree_z1/scene.xml');
 			alert('Robots downloaded and mounted.'); // TODO: replace with shadcn-svelte's `Alert`
 		}
 	}
@@ -132,7 +137,7 @@
 						</Card.Header>
 						<Card.Content>
 							{#if $scenes && $selectedScene}
-								<select class="w-full p-2" on:change={onSceneSelect}>
+								<select class="w-full p-2" onchange={onSceneSelect}>
 									{#each Object.entries($scenes) as [name, path]}
 										<option value={path} selected={$selectedScene === path}>{name}</option>
 									{/each}

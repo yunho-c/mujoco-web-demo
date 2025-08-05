@@ -8,7 +8,7 @@
 		type mujoco as Mujoco,
 		type Simulation,
 		type State
-	} from 'mujoco_wasm_contrib';
+	} from 'mujoco_wasm_contrib/debug';
 	import { DragStateManager } from '$lib/mujoco/drag-state-manager';
 	import {
 		downloadExampleScenes,
@@ -70,7 +70,13 @@
 			selectedScene.subscribe(async (scene) => {
 				if (demo && scene && demo.params.scene !== scene) {
 					demo.params.scene = scene;
-					await (reloadFunc.bind(demo) as () => Promise<void>)();
+					try {
+						await (reloadFunc.bind(demo) as () => Promise<void>)();
+					} catch (error) {
+						console.error('A WebAssembly exception was caught on scene change!');
+						const cppErrorMessage = demo.mujoco.getExceptionMessage(error);
+						console.error('Detailed C++ Error:', cppErrorMessage);
+					}
 				}
 			});
 		};

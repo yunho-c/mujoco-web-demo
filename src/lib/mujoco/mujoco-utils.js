@@ -32,7 +32,13 @@ export async function loadSceneFromURL(mujoco, filename, parent) {
 
   // alert("here1")
 	// Load in the state from XML.
-	parent.model = mujoco.Model.load_from_xml('/working/' + filename);
+	try {
+		parent.model = mujoco.Model.load_from_xml('/working/' + filename);
+	} catch (e) {
+		console.error('Failed to load model from xml: ', e);
+		alert('Failed to load model from xml: ' + e);
+		return;
+	}
 	parent.state = new mujoco.State(parent.model);
 	parent.simulation = new mujoco.Simulation(parent.model, parent.state);
   // alert("here2")

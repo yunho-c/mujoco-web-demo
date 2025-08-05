@@ -35,7 +35,7 @@ export default defineConfig({
 		]
 	},
 	optimizeDeps: {
-		exclude: ['mujoco_wasm_contrib']
+		exclude: ['mujoco_wasm_contrib', 'mujoco_wasm_contrib/debug']
 	},
 	server: {
 		fs: {

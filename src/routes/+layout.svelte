@@ -90,17 +90,15 @@
 			<Dialog.Trigger>
 				<Button variant="link" class="text-xs opacity-50">Debug</Button>
 			</Dialog.Trigger>
-			<Dialog.Content class="sm:max-w-[425px]">
+			<Dialog.Content class="sm:max-w-50%">
 				<Dialog.Header>
 					<Dialog.Title>Debug</Dialog.Title>
-					<Dialog.Description>Debug information will be displayed here.</Dialog.Description>
+					<!-- <Dialog.Description>Debug information will be displayed here.</Dialog.Description> -->
 				</Dialog.Header>
 				<div class="grid gap-4 py-4">
 					<Button onclick={onDownloadExampleScenes} disabled={!mujoco}>
 						Download Example Scenes
 					</Button>
-				</div>
-				<div class="grid gap-4 py-4">
 					<Button onclick={onDownloadRobots} disabled={!mujoco}>
 						Download Main Robots
 					</Button>

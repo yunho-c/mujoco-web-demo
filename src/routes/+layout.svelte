@@ -8,7 +8,6 @@
 	import { downloadExampleScenes } from '$lib/mujoco/mujoco-utils';
 	import { loadSceneWithAssets } from '$lib/services/mujocoAssetLoader';
 	import { onMount } from 'svelte';
-
 	let { children } = $props();
 
 	let mujoco: import('mujoco_wasm_contrib').mujoco | null = null;
@@ -31,6 +30,11 @@
 		selectedScene.set(defaultScenes.Humanoid);
 	});
 
+	function onSceneSelect(event: Event) {
+		const target = event.target as HTMLSelectElement;
+		selectedScene.set(target.value);
+	}
+
 	async function onDownloadExampleScenes() {
 		if (mujoco) {
 			await downloadExampleScenes(mujoco);
@@ -38,7 +42,7 @@
 		}
 	}
 
-  async function onDownloadRobots() {
+	async function onDownloadRobots() {
 		if (mujoco) {
 			await loadSceneWithAssets(mujoco, 'models/rby1a/mujoco/rby1a.xml');
 			alert('Robots downloaded and mounted.'); // TODO: replace with shadcn-svelte's `Alert`
@@ -99,9 +103,7 @@
 					<Button onclick={onDownloadExampleScenes} disabled={!mujoco}>
 						Download Example Scenes
 					</Button>
-					<Button onclick={onDownloadRobots} disabled={!mujoco}>
-						Download Main Robots
-					</Button>
+					<Button onclick={onDownloadRobots} disabled={!mujoco}>Download Main Robots</Button>
 				</div>
 				<div class="grid gap-4 py-4">
 					<Card.Root>
@@ -109,7 +111,25 @@
 							<Card.Title>Scenes</Card.Title>
 						</Card.Header>
 						<Card.Content>
-							<pre>{JSON.stringify($scenes, null, 2)}</pre>
+							{#if $scenes}
+								<pre>{JSON.stringify($scenes, null, 2)}</pre>
+							{/if}
+						</Card.Content>
+					</Card.Root>
+				</div>
+				<div class="grid gap-4 py-4">
+					<Card.Root>
+						<Card.Header>
+							<Card.Title>Select Scene (Debug)</Card.Title>
+						</Card.Header>
+						<Card.Content>
+							{#if $scenes && $selectedScene}
+								<select class="w-full p-2" on:change={onSceneSelect}>
+									{#each Object.entries($scenes) as [name, path]}
+										<option value={path} selected={$selectedScene === path}>{name}</option>
+									{/each}
+								</select>
+							{/if}
 						</Card.Content>
 					</Card.Root>
 				</div>

@@ -1,3 +1,10 @@
+### Project
+
+# Rainbow Robotics rby1a mujoco file definition.
+static/models/rby1a/mujoco
+
+
+### Generic ###
 node_modules
 
 # Output

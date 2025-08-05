@@ -58,8 +58,8 @@ def generate_index(root_xml_file):
     """Generates an index of all files required by a root XML file."""
     xml_file = _HERE / root_xml_file
     base_path = xml_file.parent
-    all_dependencies = get_dependencies(xml_file, _HERE)
-    all_dependencies.add(str(xml_file.relative_to(_HERE)))
+    all_dependencies = get_dependencies(xml_file, base_path)
+    all_dependencies.add(str(xml_file.relative_to(base_path)))
 
     files_to_download = sorted(list(all_dependencies))
     with open(base_path / "index.json", mode="w") as f:

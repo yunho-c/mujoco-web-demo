@@ -1,6 +1,6 @@
 // @ts-nocheck
 import * as THREE from 'three';
-import { Reflector } from './reflector';
+import { Reflector } from '$lib/mujoco/reflector';
 
 export async function reloadFunc() {
 	// Delete the old scene and load the new scene

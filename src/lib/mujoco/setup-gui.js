@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { reloadFunc } from './mujoco-utils';
+import { reloadFunc } from '$lib/mujoco/mujoco-utils';
 import { scenes, selectedScene } from '$lib/stores';
 import { get } from 'svelte/store';
 

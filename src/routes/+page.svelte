@@ -22,7 +22,6 @@
 			<WebcamPose />
 		</div>
 		<div class="col-span-1">
-			<p class="text-center">This is the right half of the full-width section.</p>
 			<MujocoSimulation />
 		</div>
 	</div>

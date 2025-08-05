@@ -20,6 +20,7 @@
 	} from '$lib/mujoco/mujoco-utils';
 	import { setupGUI } from '$lib/mujoco/setup-gui';
 	import { loadSceneWithAssets } from '$lib/services/mujocoAssetLoader';
+	import { mujocoInstance } from '$lib/stores';
 	let container: HTMLDivElement;
 
 	interface MujocoRootGroup extends THREE.Group {
@@ -51,6 +52,7 @@
 			if (!mujoco) {
 				return;
 			}
+			mujocoInstance.set(mujoco);
 			// OPT1
 			var initialScene = 'humanoid.xml'; // HACK
 			mujoco.FS.mkdir('/working');
@@ -168,7 +170,6 @@
 
 		async init() {
 			console.log(this);
-			await downloadExampleScenes(this.mujoco);
 			[this.model, this.state, this.simulation, this.bodies, this.lights] = await loadSceneFromURL(
 				this.mujoco,
 				this.params.scene as string,

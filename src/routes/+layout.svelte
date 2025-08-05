@@ -4,8 +4,22 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import { mujocoInstance } from '$lib/stores';
+	import { downloadExampleScenes } from '$lib/mujoco/mujoco-utils';
 
 	let { children } = $props();
+
+	let mujoco: typeof import('mujoco_wasm_contrib').mujoco | null = null;
+	mujocoInstance.subscribe((value) => {
+		mujoco = value;
+	});
+
+	async function onDownloadExampleScenes() {
+		if (mujoco) {
+			await downloadExampleScenes(mujoco);
+			alert('Example scenes downloaded and mounted.');
+		}
+	}
 </script>
 
 <svelte:head>
@@ -58,7 +72,9 @@
 					<Dialog.Description>Debug information will be displayed here.</Dialog.Description>
 				</Dialog.Header>
 				<div class="grid gap-4 py-4">
-					<p>Debug content goes here.</p>
+					<Button onclick={onDownloadExampleScenes} disabled={!mujoco}>
+						Download Example Scenes
+					</Button>
 				</div>
 				<Dialog.Footer>
 					<Dialog.Close>

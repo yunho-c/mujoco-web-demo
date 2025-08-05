@@ -73,17 +73,18 @@ export async function loadSceneWithAssets(
 
 			// The destination path in the virtual file system.
 			// We want to preserve the relative structure within the /working directory.
-			const destPath = `/working/${file}`;
+			const destPath = `/working/${pathInStatic}`;
 			const dirInWorking = destPath.substring(0, destPath.lastIndexOf('/'));
 
 			mkdirTree(mujoco.FS, dirInWorking);
 
 			mujoco.FS.writeFile(destPath, new Uint8Array(fileData));
-			console.log(`Loaded ${pathInStatic} into ${destPath}`);
+			console.log(`Loaded ${pathInStatic} into ${destPath}`); // DEBUG
 		})
 	);
 
-	const sceneName = sceneFilePath.split('/').pop()?.replace('.xml', '');
+	// const sceneName = sceneFilePath.split('/').pop()?.replace('.xml', '');
+	const sceneName = sceneFilePath.split('/')[1]?.replace('.xml', '');
 	if (sceneName) {
 		scenes.update((s) => ({ ...s, [sceneName]: sceneFilePath }));
 	}

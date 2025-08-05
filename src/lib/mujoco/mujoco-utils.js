@@ -30,10 +30,12 @@ export async function loadSceneFromURL(mujoco, filename, parent) {
 		parent.simulation = null;
 	}
 
+  // alert("here1")
 	// Load in the state from XML.
 	parent.model = mujoco.Model.load_from_xml('/working/' + filename);
 	parent.state = new mujoco.State(parent.model);
 	parent.simulation = new mujoco.Simulation(parent.model, parent.state);
+  // alert("here2")
 
 	let model = parent.model;
 	let state = parent.state;
@@ -394,15 +396,15 @@ export async function downloadExampleScenes(mujoco) {
 
 		if (
 			allFiles[i].endsWith('.png') ||
-			allFiles[i].endsWith('.stl') ||
+			allFiles[i].toLowerCase().endsWith('.stl') ||
 			allFiles[i].endsWith('.skn')
 		) {
 			mujoco.FS.writeFile(
 				'/working/' + allFiles[i],
 				new Uint8Array(await responses[i].arrayBuffer())
-			); // ERROR
+			);
 		} else {
-			mujoco.FS.writeFile('/working/' + allFiles[i], await responses[i].text()); // ERROR
+			mujoco.FS.writeFile('/working/' + allFiles[i], await responses[i].text());
 		}
 	}
 }

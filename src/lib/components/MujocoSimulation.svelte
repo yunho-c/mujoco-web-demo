@@ -15,12 +15,13 @@
 		getPosition,
 		getQuaternion,
 		loadSceneFromURL,
+		reloadFunc,
 		standardNormal,
 		toMujocoPos
 	} from '$lib/mujoco/mujoco-utils';
 	import { setupGUI } from '$lib/mujoco/setup-gui';
 	import { loadSceneWithAssets } from '$lib/services/mujocoAssetLoader';
-	import { mujocoInstance } from '$lib/stores';
+	import { mujocoInstance, selectedScene } from '$lib/stores';
 	let container: HTMLDivElement;
 
 	interface MujocoRootGroup extends THREE.Group {
@@ -64,6 +65,14 @@
 
 			demo = new MuJoCoDemo(mujoco);
 			await demo.init();
+
+			// When the selected scene changes, reload the simulation.
+			selectedScene.subscribe(async (scene) => {
+				if (demo && scene && demo.params.scene !== scene) {
+					demo.params.scene = scene;
+					await (reloadFunc.bind(demo) as () => Promise<void>)();
+				}
+			});
 		};
 
 		initDemo();
@@ -122,7 +131,7 @@
 			this.scene.name = 'scene';
 			this.camera = new THREE.PerspectiveCamera(
 				45,
-				window.innerWidth / window.innerHeight,
+				container.scrollWidth / container.scrollHeight,
 				0.001,
 				100
 			);

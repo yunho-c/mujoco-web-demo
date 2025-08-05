@@ -19,20 +19,23 @@
 		const defaultScenes = {
 			Humanoid: 'humanoid.xml',
 			Cassie: 'agility_cassie/scene.xml',
-			Hammock: 'hammock.xml',
-			Balloons: 'balloons.xml',
-			Hand: 'shadow_hand/scene_right.xml',
-			Flag: 'flag.xml',
-			Mug: 'mug.xml',
-			Tendon: 'model_with_tendon.xml'
+			// Hammock: 'hammock.xml',
+			// Balloons: 'balloons.xml',
+			// Hand: 'shadow_hand/scene_right.xml',
+			// Flag: 'flag.xml',
+			// Mug: 'mug.xml',
+			// Tendon: 'model_with_tendon.xml'
 		};
 		scenes.set(defaultScenes);
 		selectedScene.set(defaultScenes.Humanoid);
 	});
 
-	function onSceneSelect(event: Event) {
+	async function onSceneSelect(event: Event) {
 		const target = event.target as HTMLSelectElement;
-		selectedScene.set(target.value);
+		const scenePath = target.value;
+		if (mujoco) {
+			selectedScene.set(scenePath);
+		}
 	}
 
 	async function onDownloadExampleScenes() {
@@ -44,8 +47,12 @@
 
 	async function onDownloadRobots() {
 		if (mujoco) {
-			await loadSceneWithAssets(mujoco, 'models/rby1a/mujoco/rby1a.xml');
+			await loadSceneWithAssets(mujoco, 'models/humanoid/humanoid.xml'); // DEBUG
+			await loadSceneWithAssets(mujoco, 'models/agility_cassie/scene.xml'); // DEBUG
+			await loadSceneWithAssets(mujoco, 'models/boston_dynamics_spot/scene.xml'); // DEBUG
+			await loadSceneWithAssets(mujoco, 'models/rby1a/mujoco/model.xml');
 			await loadSceneWithAssets(mujoco, 'models/unitree_g1/g1.xml');
+			await loadSceneWithAssets(mujoco, 'models/unitree_g1/scene.xml');
 			alert('Robots downloaded and mounted.'); // TODO: replace with shadcn-svelte's `Alert`
 		}
 	}

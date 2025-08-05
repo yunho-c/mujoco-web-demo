@@ -1,5 +1,7 @@
 // @ts-nocheck
 import { reloadFunc } from './mujoco-utils';
+import { scenes, selectedScene } from '$lib/stores';
+import { get } from 'svelte/store';
 
 /** @param {MuJoCoDemo} parentContext*/
 export function setupGUI(parentContext) {
@@ -14,19 +16,15 @@ export function setupGUI(parentContext) {
 
 	// Add scene selection dropdown.
 	let reload = reloadFunc.bind(parentContext);
+	const sceneOptions = get(scenes);
 	parentContext.gui
-		.add(parentContext.params, 'scene', {
-			Humanoid: 'humanoid.xml',
-			Cassie: 'agility_cassie/scene.xml',
-			Hammock: 'hammock.xml',
-			Balloons: 'balloons.xml',
-			Hand: 'shadow_hand/scene_right.xml',
-			Flag: 'flag.xml',
-			Mug: 'mug.xml',
-			Tendon: 'model_with_tendon.xml'
-		})
+		.add(parentContext.params, 'scene', sceneOptions)
 		.name('Example Scene')
-		.onChange(reload);
+		.onChange((value) => {
+			selectedScene.set(value);
+			reload(value);
+      alert("scene selector updated")
+		});
 
 	// Add a help menu.
 	// Parameters:

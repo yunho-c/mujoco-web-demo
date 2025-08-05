@@ -4,20 +4,44 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import { mujocoInstance } from '$lib/stores';
+	import { mujocoInstance, scenes, selectedScene } from '$lib/stores';
 	import { downloadExampleScenes } from '$lib/mujoco/mujoco-utils';
+	import { loadSceneWithAssets } from '$lib/services/mujocoAssetLoader';
+	import { onMount } from 'svelte';
 
 	let { children } = $props();
 
-	let mujoco: typeof import('mujoco_wasm_contrib').mujoco | null = null;
+	let mujoco: import('mujoco_wasm_contrib').mujoco | null = null;
 	mujocoInstance.subscribe((value) => {
 		mujoco = value;
+	});
+
+	onMount(() => {
+		const defaultScenes = {
+			Humanoid: 'humanoid.xml',
+			Cassie: 'agility_cassie/scene.xml',
+			Hammock: 'hammock.xml',
+			Balloons: 'balloons.xml',
+			Hand: 'shadow_hand/scene_right.xml',
+			Flag: 'flag.xml',
+			Mug: 'mug.xml',
+			Tendon: 'model_with_tendon.xml'
+		};
+		scenes.set(defaultScenes);
+		selectedScene.set(defaultScenes.Humanoid);
 	});
 
 	async function onDownloadExampleScenes() {
 		if (mujoco) {
 			await downloadExampleScenes(mujoco);
-			alert('Example scenes downloaded and mounted.');
+			alert('Example scenes downloaded and mounted.'); // TODO: replace with shadcn-svelte's `Alert`
+		}
+	}
+
+  async function onDownloadRobots() {
+		if (mujoco) {
+			await loadSceneWithAssets(mujoco, 'models/rby1a/mujoco/rby1a.xml');
+			alert('Robots downloaded and mounted.'); // TODO: replace with shadcn-svelte's `Alert`
 		}
 	}
 </script>
@@ -75,6 +99,21 @@
 					<Button onclick={onDownloadExampleScenes} disabled={!mujoco}>
 						Download Example Scenes
 					</Button>
+				</div>
+				<div class="grid gap-4 py-4">
+					<Button onclick={onDownloadRobots} disabled={!mujoco}>
+						Download Main Robots
+					</Button>
+				</div>
+				<div class="grid gap-4 py-4">
+					<Card.Root>
+						<Card.Header>
+							<Card.Title>Scenes</Card.Title>
+						</Card.Header>
+						<Card.Content>
+							<pre>{JSON.stringify($scenes, null, 2)}</pre>
+						</Card.Content>
+					</Card.Root>
 				</div>
 				<Dialog.Footer>
 					<Dialog.Close>

@@ -45,6 +45,7 @@
 	async function onDownloadRobots() {
 		if (mujoco) {
 			await loadSceneWithAssets(mujoco, 'models/rby1a/mujoco/rby1a.xml');
+			await loadSceneWithAssets(mujoco, 'models/unitree_g1/g1.xml');
 			alert('Robots downloaded and mounted.'); // TODO: replace with shadcn-svelte's `Alert`
 		}
 	}

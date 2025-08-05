@@ -2,6 +2,7 @@
 
 # Rainbow Robotics rby1a mujoco file definition.
 static/models/rby1a/mujoco
+static/models/unitree_g1
 
 
 ### Generic ###

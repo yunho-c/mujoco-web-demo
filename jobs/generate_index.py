@@ -69,3 +69,6 @@ def generate_index(root_xml_file):
 if __name__ == "__main__":
     # Example: RB-Y1
     generate_index("models/rby1a/mujoco/model.xml")
+
+    # Example: Unitree G1
+    generate_index("models/unitree_g1/g1.xml")

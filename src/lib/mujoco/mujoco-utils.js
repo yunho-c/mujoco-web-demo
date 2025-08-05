@@ -1,6 +1,6 @@
 // @ts-nocheck
 import * as THREE from 'three';
-import { Reflector } from './Reflector.js';
+import { Reflector } from './reflector.js';
 
 export async function reloadFunc() {
 	// Delete the old scene and load the new scene

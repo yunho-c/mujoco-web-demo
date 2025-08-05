@@ -9,7 +9,7 @@
 		type Simulation,
 		type State
 	} from 'mujoco_wasm_contrib';
-	import { DragStateManager } from '$lib/mujoco/DragStateManager';
+	import { DragStateManager } from '$lib/mujoco/drag-state-manager';
 	import {
 		downloadExampleScenes,
 		getPosition,
@@ -17,8 +17,8 @@
 		loadSceneFromURL,
 		standardNormal,
 		toMujocoPos
-	} from '$lib/mujoco/mujocoUtils';
-	import { setupGUI } from '$lib/mujoco/gui';
+	} from '$lib/mujoco/mujoco-utils';
+	import { setupGUI } from '$lib/mujoco/setup-gui';
 	import { loadSceneWithAssets } from '$lib/services/mujocoAssetLoader';
 	let container: HTMLDivElement;
 

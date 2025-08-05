@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { reloadFunc } from './mujocoUtils';
+import { reloadFunc } from './mujoco-utils';
 
 /** @param {MuJoCoDemo} parentContext*/
 export function setupGUI(parentContext) {
